@@ -17,6 +17,8 @@ services:
       - backend_public:/usr/src/app/public
     env_file:
       - .env-backend-local
+    environment:
+      DB_PASS: ${WHATICKET_DB_PASSWORD}
     restart: always
     depends_on:
       - postgres
@@ -36,17 +38,17 @@ services:
     networks:
       - ticketz
 
-  postgres:
+    postgres:
     image: postgres:16-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${POSTGRES_USER:-ticketz}
-      - POSTGRES_DB=${POSTGRES_DB:-ticketz}
-      - POSTGRES_HOST_AUTH_METHOD=trust
-      - TZ=${TZ:-America/Fortaleza}
+      POSTGRES_USER: ticketz
+      POSTGRES_DB: ticketz
+      POSTGRES_PASSWORD: ${WHATICKET_DB_PASSWORD}
+      TZ: America/Fortaleza
     expose:
-      - 5432
+      - "5432"
     restart: always
     networks:
       - ticketz
